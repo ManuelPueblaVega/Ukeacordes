@@ -155,11 +155,11 @@
         // Mapeo de nombres de tipo a sufijos de archivo
         // Solo se incluyen los tipos de acordes solicitados por el usuario
         const chordTypes = {
-            'Mayor': '',      // Ejemplo: C.png
-            'menor': 'm',     // Ejemplo: Cm.png
-            'disminuido': 'dim', // Ejemplo: Cdim.png
-            '7': '7',         // Ejemplo: C7.png
-            'menor 7': 'm7'   // Ejemplo: Cm7.png
+            'Mayor': '',      // Ejemplo: C.png, C#.png
+            'menor': 'm',     // Ejemplo: Cm.png, C#m.png
+            'disminuido': 'dim', // Ejemplo: Cdim.png, C#dim.png
+            '7': '7',         // Ejemplo: C7.png, C#7.png
+            'menor 7': 'm7'   // Ejemplo: Cm7.png, C#m7.png
         };
 
         /**
@@ -192,8 +192,10 @@
             // Construir el nombre del archivo de la imagen
             // Ejemplo: C.png, Cm.png, C#m.png, Cdim.png, C7.png, Cm7.png
             const imageName = `${selectedNote}${selectedTypeSuffix}.png`;
+            // URL-encode el símbolo '#' en el nombre del archivo para evitar problemas en la URL
+            const encodedImageName = imageName.replace(/#/g, '%23');
             // Las imágenes se esperan en una carpeta 'images'
-            const imagePath = `./images/${imageName}`;
+            const imagePath = `./images/${encodedImageName}`;
 
             // Añadir clase para animación de salida
             chordImage.classList.add('fade-out');
@@ -224,7 +226,10 @@
             let displayedChordName = '';
             if (selectedTypeDisplayName === '7') {
                 displayedChordName = `${selectedNote}7`;
-            } else {
+            } else if (selectedTypeDisplayName === 'Mayor') {
+                displayedChordName = `${selectedNote} Mayor`;
+            }
+            else {
                 displayedChordName = `${selectedNote} ${selectedTypeDisplayName}`;
             }
             selectedChordName.textContent = displayedChordName;
