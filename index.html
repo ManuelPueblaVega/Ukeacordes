@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acordes de Ukelele</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define la fuente Inter si no está ya en el sistema */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right bottom, #a7f3d0, #6ee7b7); /* Degradado suave de fondo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem; /* Padding general para pantallas pequeñas */
+            box-sizing: border-box; /* Incluir padding en el tamaño total */
+        }
+        .chord-container {
+            background-color: #ffffff;
+            border-radius: 2rem; /* Bordes aún más redondeados */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 3rem; /* Más padding para un look más premium */
+            max-width: 550px; /* Un poco más ancho */
+            width: 100%; /* Ocupa todo el ancho disponible */
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.8); /* Borde sutil */
+            backdrop-filter: blur(5px); /* Efecto de desenfoque para un look "glassmorphism" */
+            -webkit-backdrop-filter: blur(5px);
+            animation: fadeIn 0.8s ease-out; /* Animación de entrada */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .select-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        select {
+            appearance: none;
+            background-color: #f0f4f8; /* Un color de fondo más claro */
+            border: 1px solid #cbd5e0;
+            border-radius: 1rem; /* Bordes redondeados para los select */
+            padding: 0.85rem 1.25rem; /* Más padding */
+            width: 100%;
+            font-size: 1.15rem; /* Texto ligeramente más grande */
+            color: #2d3748;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease-in-out; /* Transición más suave */
+        }
+        select:hover {
+            background-color: #e2e8f0;
+        }
+        select:focus {
+            border-color: #38b2ac; /* Un verde azulado más moderno */
+            box-shadow: 0 0 0 4px rgba(56, 178, 172, 0.4); /* Sombra de enfoque más pronunciada */
+        }
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 1.25rem; /* Ajuste de posición */
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #4a5568;
+            font-size: 0.9rem; /* Tamaño de flecha más pequeño */
+        }
+        .chord-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            border: 2px solid #e2e8f0; /* Borde más visible */
+            margin-top: 2.5rem; /* Más margen superior */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Transición para zoom y opacidad */
+            display: block; /* Asegura que la imagen sea un elemento de bloque */
+            margin-left: auto; /* Centra la imagen horizontalmente */
+            margin-right: auto; /* Centra la imagen horizontalmente */
+        }
+        .chord-image.fade-in {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .chord-image.fade-out {
+            opacity: 0;
+            transform: scale(0.98);
+        }
+
+        /* Estilos responsivos con Tailwind */
+        @media (max-width: 640px) {
+            .chord-container {
+                padding: 2rem; /* Menos padding en móviles */
+                border-radius: 1.5rem;
+            }
+            h1 {
+                font-size: 2.5rem; /* Ajuste de tamaño de título en móviles */
+            }
+            h2 {
+                font-size: 2rem; /* Ajuste de tamaño de subtítulo en móviles */
+            }
+            select {
+                font-size: 1rem; /* Ajuste de tamaño de fuente en select en móviles */
+                padding: 0.75rem 1rem;
+            }
+            .select-wrapper::after {
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chord-container">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-6">Acordes de Ukelele</h1>
+
+        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+            <div class="flex-1 select-wrapper">
+                <label for="note-select" class="block text-gray-700 text-sm font-bold mb-2 text-left">Nota:</label>
+                <select id="note-select" class="shadow-sm">
+                    <!-- Las opciones se generarán con JavaScript -->
+                </select>
+            </div>
+
+            <div class="flex-1 select-wrapper">
+                <label for="type-select" class="block text-gray-700 text-sm font-bold mb-2 text-left">Tipo de Acorde:</label>
+                <select id="type-select" class="shadow-sm">
+                    <!-- Las opciones se generarán con JavaScript -->
+                </select>
+            </div>
+        </div>
+
+        <h2 id="selected-chord-name" class="text-3xl sm:text-4xl font-bold text-teal-600 mb-6 transition-colors duration-300">C Mayor</h2>
+        <img id="chord-image" src="./images/C.png" alt="Diagrama de Acorde" class="chord-image fade-in">
+        <p id="image-error" class="text-red-500 mt-4 hidden text-sm">Imagen no encontrada para este acorde. Por favor, asegúrate de que el archivo existe en la carpeta `/images`.</p>
+    </div>
+
+    <script>
+        // Obtener referencias a los elementos HTML
+        const noteSelect = document.getElementById('note-select');
+        const typeSelect = document.getElementById('type-select');
+        const chordImage = document.getElementById('chord-image');
+        const selectedChordName = document.getElementById('selected-chord-name');
+        const imageError = document.getElementById('image-error');
+
+        // Definir las notas y tipos de acordes
+        const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        // Mapeo de nombres de tipo a sufijos de archivo
+        const chordTypes = {
+            'Mayor': '', // Mayor no tiene sufijo en el nombre del archivo (ej. C.png)
+            'menor': 'm',
+            'séptima': '7',
+            'disminuido': 'dim',
+            'séptima Mayor': 'maj7',
+            'séptima menor': 'm7',
+            'suspendido 4': 'sus4',
+            'add 9': 'add9'
+        };
+
+        /**
+         * Rellena un elemento select con opciones de un array.
+         * @param {HTMLSelectElement} selectElement - El elemento select a rellenar.
+         * @param {Array<string>} optionsArray - El array de opciones.
+         * @param {string} [defaultValue] - El valor por defecto a seleccionar.
+         */
+        function populateSelect(selectElement, optionsArray, defaultValue = '') {
+            selectElement.innerHTML = ''; // Limpiar opciones existentes
+            optionsArray.forEach(optionValue => {
+                const option = document.createElement('option');
+                option.value = optionValue;
+                option.textContent = optionValue;
+                if (optionValue === defaultValue) {
+                    option.selected = true;
+                }
+                selectElement.appendChild(option);
+            });
+        }
+
+        /**
+         * Actualiza la imagen del acorde y el nombre mostrado.
+         */
+        function updateChord() {
+            const selectedNote = noteSelect.value;
+            const selectedTypeDisplayName = typeSelect.value;
+            const selectedTypeSuffix = chordTypes[selectedTypeDisplayName];
+
+            // Construir el nombre del archivo de la imagen
+            // Ejemplo: C.png, Am.png, G7.png, A#dim.png
+            const imageName = `${selectedNote}${selectedTypeSuffix}.png`;
+            // Ahora las imágenes se esperan en una carpeta 'images'
+            const imagePath = `./images/${imageName}`;
+
+            // Añadir clase para animación de salida
+            chordImage.classList.add('fade-out');
+            chordImage.classList.remove('fade-in');
+
+            // Retrasar la carga de la nueva imagen para permitir la animación de salida
+            setTimeout(() => {
+                chordImage.src = imagePath;
+                // Una vez que la imagen se ha cargado (o ha fallado), añadir animación de entrada
+                chordImage.onload = () => {
+                    chordImage.classList.remove('fade-out');
+                    chordImage.classList.add('fade-in');
+                    imageError.classList.add('hidden'); // Ocultar error si la carga es exitosa
+                };
+                chordImage.onerror = () => {
+                    imageError.classList.remove('hidden');
+                    // Mostrar una imagen de placeholder si no se encuentra la imagen
+                    chordImage.src = `https://placehold.co/400x400/FFCCCC/CC0000?text=No+Disponible`;
+                    chordImage.classList.remove('fade-out');
+                    chordImage.classList.add('fade-in');
+                };
+            }, 200); // Duración de la animación fade-out
+
+            // Actualizar el nombre del acorde mostrado
+            selectedChordName.textContent = `${selectedNote} ${selectedTypeDisplayName}`;
+        }
+
+        // Inicializar los selectores al cargar la página
+        window.onload = () => {
+            populateSelect(noteSelect, notes, 'C'); // Seleccionar 'C' por defecto
+            populateSelect(typeSelect, Object.keys(chordTypes), 'Mayor'); // Seleccionar 'Mayor' por defecto
+            updateChord(); // Mostrar el acorde inicial
+        };
+
+        // Añadir event listeners para cuando cambie la selección
+        noteSelect.addEventListener('change', updateChord);
+        typeSelect.addEventListener('change', updateChord);
+    </script>
+</body>
+</html>
