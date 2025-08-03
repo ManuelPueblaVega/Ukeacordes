@@ -153,15 +153,13 @@
         // Definir las notas y tipos de acordes
         const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         // Mapeo de nombres de tipo a sufijos de archivo
+        // Solo se incluyen los tipos de acordes solicitados por el usuario
         const chordTypes = {
-            'Mayor': '', // Mayor no tiene sufijo en el nombre del archivo (ej. C.png)
-            'menor': 'm',
-            'séptima': '7',
-            'disminuido': 'dim',
-            'séptima Mayor': 'maj7',
-            'séptima menor': 'm7',
-            'suspendido 4': 'sus4',
-            'add 9': 'add9'
+            'Mayor': '',      // Ejemplo: C.png
+            'menor': 'm',     // Ejemplo: Cm.png
+            'disminuido': 'dim', // Ejemplo: Cdim.png
+            '7': '7',         // Ejemplo: C7.png
+            'menor 7': 'm7'   // Ejemplo: Cm7.png
         };
 
         /**
@@ -192,9 +190,9 @@
             const selectedTypeSuffix = chordTypes[selectedTypeDisplayName];
 
             // Construir el nombre del archivo de la imagen
-            // Ejemplo: C.png, Am.png, G7.png, A#dim.png
+            // Ejemplo: C.png, Cm.png, C#m.png, Cdim.png, C7.png, Cm7.png
             const imageName = `${selectedNote}${selectedTypeSuffix}.png`;
-            // Ahora las imágenes se esperan en una carpeta 'images'
+            // Las imágenes se esperan en una carpeta 'images'
             const imagePath = `./images/${imageName}`;
 
             // Añadir clase para animación de salida
@@ -220,7 +218,16 @@
             }, 200); // Duración de la animación fade-out
 
             // Actualizar el nombre del acorde mostrado
-            selectedChordName.textContent = `${selectedNote} ${selectedTypeDisplayName}`;
+            // Para "Mayor", el nombre se muestra como "C Mayor"
+            // Para "7", el nombre se muestra como "C7"
+            // Para "menor 7", el nombre se muestra como "C menor 7"
+            let displayedChordName = '';
+            if (selectedTypeDisplayName === '7') {
+                displayedChordName = `${selectedNote}7`;
+            } else {
+                displayedChordName = `${selectedNote} ${selectedTypeDisplayName}`;
+            }
+            selectedChordName.textContent = displayedChordName;
         }
 
         // Inicializar los selectores al cargar la página
